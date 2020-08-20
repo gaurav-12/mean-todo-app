@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 
 var userSchema = new mongoose.Schema({
-    uid: mongoose.SchemaTypes.ObjectId,
     fullName: {
         type: String,
         required: 'Full name cannot be empty'
@@ -15,9 +14,14 @@ var userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: 'Password cannot be empty',
-        minlength : [8,'Password must be at least 8 character long']
+        minlength : [8,'Password must be at least 8 characters long']
     },
-    saltSecret: String
+    saltSecret: String,
+
+    todoList: {
+        type: mongoose.SchemaTypes.Array,
+        default: [],
+    }
 });
 
 // Custom validation for email
@@ -37,4 +41,4 @@ userSchema.pre('save', function (next) {
     });
 });
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', userSchema, 'Users');

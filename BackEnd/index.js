@@ -4,7 +4,9 @@ const userController = require('./controllers/user.controller');
 const todoController = require('./controllers/todo.controller');
 
 let app = express();
-app.use(bodyParser);
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
+app.use(bodyParser.text());
 app.listen(3000, () => {
     console.log('Server running at port 3000...');
 });

@@ -1,30 +1,42 @@
 const UserModel = require('../models/user.model');
-
+const bcrypt = require('bcrypt');
 const router = require('express').Router();
 
-router.post('/signup', (req, res) => {
-    UserModel.findOne({email: req.query.email}, (err, userModel) => {
-        if(!err) res.status(400).send('User already present with same email id');
-        else {
-            const user = new UserModel({
-                fullName: req.query.fullName,
-                email: req.query.email,
-                password: req.query.password
-            });
+router.post('/signup', async (req, res) => {
+    try {
+        const newUser = new UserModel({
+            fullName: req.query.fullName,
+            email: req.query.email,
+            password: req.query.password
+        });
 
-            user.save((err, user) => {
-                if(err) res.status(404).send(err)
-                else res.status(201).send(user);
-            });
-        }
-    });
+        const user = await newUser.save()
+        res.status(201).json({ user });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: error.message
+        });
+    }
 });
 
-router.get('/login', (req, res) => {
-    UserModel.findOne({email: req.query.email}, (err, userModel) => {
-        if(err) res.status(400).send('No user found with entered email');
-        else res.status(200).send(userModel);
-    });
+router.get('/login', async (req, res) => {
+    try {
+        const user = await UserModel.findOne({ email: req.query.email })
+        if (user === null) res.status(400).send('User not found');
+        else {
+            await bcrypt.compare(req.query.password, user.password, (err, same) => {
+                if(err) res.status(500).json({error: err});
+                else if(same) res.status(200).json({ user });
+                else res.status(401).send('Password did not match');
+            });            
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            error: error.message
+        });
+    }
 });
 
 module.exports = router;
