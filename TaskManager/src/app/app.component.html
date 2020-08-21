@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+
+<div id="container">
+  <h2> Task Manager </h2>
+  <p> Add new Task and mark them as Done, Pending, Ongoing </p>
+
+  <div>
+    <div id="titleBox">
+      <input type="text" name="title" [(ngModel)]="thisTitle" required placeholder="Title of new Task..."
+        title="Title of the Task" (focus)="showMore = true"/>
+      <button id="moreButton" *ngIf="showMore" (click)="showMore = false">Less</button>
+    </div>
+
+    <textarea type="text" name="description" [(ngModel)]="thisDescription" placeholder="Details of the task..."
+      title="Description of the Task" *ngIf="showMore">
+    </textarea>
+
+    <button title="Save this Task" (click)="onSave()" *ngIf="showMore">
+      Save
+    </button>
+  </div>
+
+  <div *ngFor="let todo of todoService.todoList">
+    <todo-list-item [todo]="todo"></todo-list-item>
+  </div>
+
+  <div *ngIf="todoService.todoList.length == 0" id="emptyListPlaceholder">
+    Add new ToDo Tasks here
+  </div>
+</div>
+
+<router-outlet></router-outlet>
