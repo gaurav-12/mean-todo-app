@@ -8,11 +8,18 @@ export class TodoService {
   todoList:Array<ToDo> = [];
   readonly todoStatus = {DONE: 'done', PENDING:'pending', DOING:'doing'};
   
-  constructor() { }
+  constructor() {
+    const sampleToDo = new ToDo();
+    sampleToDo.title = "Dummy Title";
+    sampleToDo.description = "Dummy Description";
+    sampleToDo.createdOn = Date.now();
+    sampleToDo.status = this.todoStatus.PENDING;
 
-  getToDo(itemIndex?: number) {
-    if(itemIndex) return this.todoList[itemIndex];
-    else return this.todoList;
+    this.todoList.push(sampleToDo);
+  }
+
+  getToDo(itemIndex: number) {
+    return this.todoList[itemIndex];
   }
 
   removeToDo(itemIndex?:number) {

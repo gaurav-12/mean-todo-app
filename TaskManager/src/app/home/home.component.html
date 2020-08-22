@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+
+<div id="navbar">
+  <span>✅TaskManager</span>
+
+  <div>
+    <button routerLink="login">Log in</button>
+    <button routerLink="signup">Sign up</button>
+  </div>
+</div>
+
+<div id="container">
+  <p> Add new Task and mark them as Done, Pending, Ongoing </p>
+
+  <div>
+    <div id="titleBox">
+      <input type="text" name="title" [(ngModel)]="thisTitle" required placeholder="Title of new Task..."
+        title="Title of the Task" (focus)="showMore = true" />
+      <button id="moreButton" *ngIf="showMore" (click)="showMore = false">Less</button>
+    </div>
+
+    <textarea type="text" name="description" [(ngModel)]="thisDescription" placeholder="Details of the task..."
+      title="Description of the Task" *ngIf="showMore">
+    </textarea>
+
+    <button title="Save this Task" (click)="onSave()" *ngIf="showMore">
+      Save
+    </button>
+  </div>
+
+  <div id="todoListContainer">
+    <div *ngFor="let todo of todoService.todoList; let i = index">
+      <todo-list-item [todo]="todo" [index]="i" [expandedIndex]="expandedIndex" (expandedThis)="expandedIndex = $event"
+        (statusChanged)="onStatusChange(i, $event)" (removeThis)="onRemoveToDo(i)"></todo-list-item>
+    </div>
+  </div>
+
+  <div *ngIf="todoService.todoList.length == 0" id="emptyListPlaceholder">
+    Add new ToDo Tasks here
+  </div>
+</div>
+
+<router-outlet></router-outlet>

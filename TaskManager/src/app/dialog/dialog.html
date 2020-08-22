@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+
+<div id="tabButtons">
+    <button [ngClass]="{'selectedTab': thisRoute == '/login'}"
+    (click)="switchTo('/login')">Log in</button>
+    <button [ngClass]="{'selectedTab': thisRoute == '/signup'}"
+    (click)="switchTo('/signup')">Sign up</button>
+</div>
+
+Something!
+
+<button>{{thisRoute == '/login'? 'Log in' : 'Sign up'}}</button>
+<button (click)="closeDialog()">Cancel</button>

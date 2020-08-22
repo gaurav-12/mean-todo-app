@@ -1,0 +1,61 @@
+#container {
+    text-align: start;
+    padding: 10px;
+    border: 1px solid black;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+#titleDateContainer {
+    display: flex;
+    flex-direction: row;
+}
+
+#titleDateContainer div {
+    flex-grow: 2;
+    margin-left: 10px;
+}
+
+/* Title */
+#titleDateContainer p:nth-child(1) {
+    font-size: 18px;
+    font-weight: 500;
+    margin: 5px 0px;
+}
+
+/* Date */
+#titleDateContainer p:nth-child(2) {
+    font-size: 12px;
+    font-style: italic;
+    font-weight: 300;
+    opacity: 0.5;
+    margin: 0px;
+}
+
+/* Description */
+
+div #description {
+    font-size: 15px;
+    margin: 10px 0px 0px;
+    border-top: 1px solid black;
+    padding-top: 10px;
+}
+
+.doneToDoTitle {
+    text-decoration-line: line-through;
+    font-style: italic;
+}
+
+.selectedStatus {
+    background: gray;
+}
+
+button {
+    padding: 10px;
+    border: 1px solid black;
+    font-size: 15px;
+}
+
+button, textarea, input:focus {
+    outline: 0px;
+}

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { ToDo } from '../models/todo.model';
 
 @Component({
@@ -8,4 +8,23 @@ import { ToDo } from '../models/todo.model';
 })
 export class TodoListItemComponent {
   @Input('todo') public todoData: ToDo;
+  @Input('index') public todoIndex: Number;
+  @Input('expandedIndex') public expandedIndex: Number;
+  @Output() public expandedThis = new EventEmitter();
+  @Output() public statusChanged = new EventEmitter();
+  @Output() public removeThis = new EventEmitter();
+
+  removeToDo() {
+    this.removeThis.emit();
+  }
+
+  expandToDo() {
+    if (this.expandedIndex == this.todoIndex) this.expandedThis.emit(-1);
+    else this.expandedThis.emit(this.todoIndex);
+  }
+
+  changeStatus(status) {
+    if (this.todoData.status === status) this.statusChanged.emit('pending');
+    else this.statusChanged.emit(status);
+  }
 }

@@ -1,8 +1,21 @@
 <!DOCTYPE html>
 
-<div>
-    <p>{{todoData.title}}</p>
-    <p>{{todoData.description}}</p>
-    <span>{{todoData.createdOn | date}}</span>
-    <span>{{todoData.status | uppercase}}</span>
+<div id="container">
+    <div id="titleDateContainer">
+        <button (click)="removeToDo()">Remove</button>
+
+        <div (click)="expandToDo()">
+            <p [ngClass]="{'doneToDoTitle': todoData.status === 'done'}">
+                {{todoData.title}}</p>
+            <p [ngClass]="{'doneToDoTitle': todoData.status === 'done'}">
+                {{todoData.createdOn | date}}</p>
+        </div>
+
+        <button (click)="changeStatus('doing')"
+            [ngClass]="{'selectedStatus': todoData.status === 'doing'}">Doing</button>
+        <button (click)="changeStatus('done')" [ngClass]="{'selectedStatus': todoData.status === 'done'}">Done</button>
+    </div>
+
+    <p *ngIf="expandedIndex == todoIndex" id="description" [ngClass]="{'doneToDoTitle': todoData.status === 'done'}">
+        {{todoData.description}}</p>
 </div>
