@@ -2,8 +2,59 @@
     width: 50%;
 }
 
+#spinnerContainer {
+    position: absolute;
+    background: rgba(0, 0, 0, 0.3);
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .selectedTab {
     background: gray;
+}
+
+.field {
+    padding: 10px;
+    font-size: 15px;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    border: 1px solid black;
+    margin-top: 10px;
+}
+
+.passwordField {
+    margin: 0px;
+    border: none;
+    flex: 4;
+}
+
+.loginSignupContainer {
+    margin: 15px 0px;
+}
+
+.passwordContainer {
+    display: flex;
+    flex-direction: row;
+    margin-top: 10px;
+    border: 1px solid black;
+    width: 100%;
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+}
+
+.passwordContainer button {
+    margin: 5px;
+    padding: 0px;
+    flex: 2;
 }
 
 button {

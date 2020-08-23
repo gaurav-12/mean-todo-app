@@ -1,13 +1,35 @@
 <!DOCTYPE html>
 
 <div id="tabButtons">
-    <button [ngClass]="{'selectedTab': thisRoute == '/login'}"
-    (click)="switchTo('/login')">Log in</button>
-    <button [ngClass]="{'selectedTab': thisRoute == '/signup'}"
-    (click)="switchTo('/signup')">Sign up</button>
+    <button [ngClass]="{'selectedTab': thisRoute == '/login'}" (click)="switchTo('/login')">Log in</button>
+    <button [ngClass]="{'selectedTab': thisRoute == '/signup'}" (click)="switchTo('/signup')">Sign up</button>
 </div>
 
-Something!
+<form #signupLoginForm="ngForm">
+    <div class="loginSignupContainer">
+        <input type="email" class="field" name="email" [(ngModel)]="email" placeholder="Email" required
+            title="Enter your Email" />
 
-<button>{{thisRoute == '/login'? 'Log in' : 'Sign up'}}</button>
-<button (click)="closeDialog()">Cancel</button>
+        <input type="text" class="field" name="name" [(ngModel)]="name" placeholder="Name" required
+            title="Enter your Name" *ngIf="thisRoute == '/signup'" />
+
+        <div class="passwordContainer">
+            <input type="{{showingPassword? 'text' : 'password'}}" class="field passwordField" name="password"
+                [(ngModel)]="password" placeholder="Password" minlength="8" required title="Enter a strong Password" />
+            <button (click)="toggleShowPassword()">{{showingPassword? 'Hide' : 'Show'}}</button>
+        </div>
+
+        <div class="passwordContainer" *ngIf="thisRoute == '/signup'">
+            <input type="{{showingPassword? 'text' : 'password'}}" class="field passwordField" name="confirmPassword"
+                [(ngModel)]="confirmPassword" placeholder="Confirm Password" required title="Re-enter Password" />
+            <button (click)="toggleShowPassword()">{{showingPassword? 'Hide' : 'Show'}}</button>
+        </div>
+    </div>
+
+    <button (click)="login()">{{thisRoute == '/login'? 'Log in' : 'Sign up'}}</button>
+    <button (click)="closeDialog()">Cancel</button>
+</form>
+
+<div id="spinnerContainer" *ngIf="isLoading">
+    <mat-spinner [diameter]='50'></mat-spinner>
+</div>

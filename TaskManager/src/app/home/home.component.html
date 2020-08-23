@@ -6,10 +6,12 @@
   <div>
     <button routerLink="login">Log in</button>
     <button routerLink="signup">Sign up</button>
+    <button routerLink="" *ngIf="userService.isLoggedIn">Logout</button>
   </div>
 </div>
 
 <div id="container">
+  <h1>Hello there!</h1>
   <p> Add new Task and mark them as Done, Pending, Ongoing </p>
 
   <div>

@@ -2,11 +2,13 @@ import { Component } from '@angular/core';
 
 import { TodoService } from '../services/todo.service';
 import { ToDo } from '../models/todo.model';
+import { UserService } from '../services/user.service';
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  providers: [UserService]
 })
 export class HomeComponent {
 
@@ -16,7 +18,7 @@ export class HomeComponent {
   showMore = false;
   expandedIndex = -1;
 
-  constructor(public todoService: TodoService) { }
+  constructor(public todoService: TodoService, public userService: UserService) { }
 
   onSave() {
     const newToDo = new ToDo();
