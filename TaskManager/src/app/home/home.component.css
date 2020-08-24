@@ -63,18 +63,18 @@ textarea {
     -webkit-box-sizing: border-box;
 }
 
-#moreButton {
-    width: 80px;
-    padding: 5px;
-}
-
-/* Title of ToDo */
-
-input {
-    padding-right: 10px;
+#titleBox input {
+    padding: 10px;
     font-size: 18px;
     border: none;
-    flex-grow: 2;
+    flex: 5;
+    width: 100%;
+}
+
+#moreButton {
+    margin: 5px;
+    padding: 0px;
+    flex: 2;
 }
 
 button {

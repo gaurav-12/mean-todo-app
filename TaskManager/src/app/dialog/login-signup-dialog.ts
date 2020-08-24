@@ -26,8 +26,7 @@ export class DialogEntryComponent {
 @Component({
   selector: 'dialog-overview',
   templateUrl: 'dialog.html',
-  styleUrls: ['dialog.css'],
-  providers: [UserService]
+  styleUrls: ['dialog.css']
 })
 export class DialogOverviewDialog {
   constructor(public dialogRef: MatDialogRef<DialogOverviewDialog>,
@@ -43,7 +42,7 @@ export class DialogOverviewDialog {
 
   showingPassword = false;
   toggleShowPassword() {
-    this.showingPassword = this.showingPassword? false : true;
+    this.showingPassword = this.showingPassword ? false : true;
   }
 
   closeDialog() {
@@ -55,15 +54,13 @@ export class DialogOverviewDialog {
     this.thisRoute = path;
   }
 
-  login() {
-    this.userService.currentUser = {
-      name: this.name,
-      email: this.email,
-      password: this.password
+  loginSignup() {
+    if (this.thisRoute === '/login') {
+      this.userService.loginUser(this.email, this.password);
+    } else {
+      this.userService.signupUser(this.name, this.email, this.password);
     }
-
-    this.userService.isLoggedIn = true;
-
+    
     this.closeDialog();
   }
 }
