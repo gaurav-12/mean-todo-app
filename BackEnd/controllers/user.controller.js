@@ -11,7 +11,7 @@ router.post('/signup', async (req, res) => {
         });
 
         const user = await newUser.save()
-        res.status(201).json({ user });
+        res.status(201).json(user.toJSON());
     } catch (error) {
         console.error(error);
         res.status(500).json({
@@ -27,7 +27,7 @@ router.get('/login', async (req, res) => {
         else {
             await bcrypt.compare(req.query.password, user.password, (err, same) => {
                 if(err) res.status(500).json({error: err});
-                else if(same) res.status(200).json({ user });
+                else if(same) res.status(200).json(user.toJSON());
                 else res.status(401).send('Password did not match');
             });            
         }
