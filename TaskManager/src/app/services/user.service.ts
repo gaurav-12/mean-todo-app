@@ -10,9 +10,7 @@ import { environment } from '../../environments/environment';
 export class UserService {
   currentUser: User = {
     _id: '',
-    fullName: '',
-    email: '',
-    password: ''
+    fullName: ''
   }
 
   isLoggedIn = false;
@@ -20,6 +18,8 @@ export class UserService {
   constructor(private todoService: TodoService, private httpClient: HttpClient) {
     this.isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn'));
     this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+    if (this.isLoggedIn) todoService.getUsersToDos(this.isLoggedIn, this.currentUser._id);
   }
 
   async loginUser(email: String, password: String) {
@@ -31,15 +31,15 @@ export class UserService {
       .toPromise().then((result: User) => {
         this.currentUser = {
           _id: result._id,
-          fullName: result.fullName,
-          email: email,
-          password: result.password
+          fullName: result.fullName
         }
 
         this.isLoggedIn = true;
 
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
+
+        this.todoService.getUsersToDos(this.isLoggedIn, this.currentUser._id);
       }).catch(err => {
         console.log(err);
       });
@@ -53,13 +53,9 @@ export class UserService {
     });
     await this.httpClient.post(environment.signup + queryParams.toString(), {})
       .toPromise().then((result: User) => {
-        console.log(result);
-
         this.currentUser = {
           _id: result._id,
-          fullName: name,
-          email: email,
-          password: result.password
+          fullName: name
         }
 
         this.isLoggedIn = true;
@@ -80,7 +76,7 @@ export class UserService {
     }
 
     this.isLoggedIn = false;
-    this.todoService.removeToDo();
+    this.todoService.removeToDo(true);
 
     localStorage.setItem('isLoggedIn', 'false');
     localStorage.setItem('currentUser', null);

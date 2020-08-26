@@ -24,7 +24,7 @@ export class HomeComponent {
     newToDo.title = this.thisTitle;
     newToDo.description = this.thisDescription;
     newToDo.status = this.todoService.todoStatus.PENDING;
-    this.todoService.addToDo(newToDo);
+    this.todoService.addToDo(newToDo, this.userService.currentUser._id);
 
     this.thisTitle = "";
     this.thisDescription = "";
@@ -38,6 +38,6 @@ export class HomeComponent {
   }
 
   onRemoveToDo(index) {
-    this.todoService.removeToDo(index);
+    this.todoService.removeToDo(false, this.userService.currentUser._id, index);
   }
 }

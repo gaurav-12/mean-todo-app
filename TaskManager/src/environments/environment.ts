@@ -7,7 +7,11 @@ export const environment = {
   
   // API URLs
   signup: 'http://localhost:3000/api/user/signup?',
-  login: 'http://localhost:3000/api/user/login?'
+  login: 'http://localhost:3000/api/user/login?',
+  getTodo: 'http://localhost:3000/api/todo/get?id=',
+  removeToDO: 'http://localhost:3000/api/todo/remove?',
+  addToDo: 'http://localhost:3000/api/todo/add?',
+  updateToDo: 'http://localhost:3000/api/todo/update?'
 };
 
 /*

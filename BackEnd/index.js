@@ -5,8 +5,8 @@ const userController = require('./controllers/user.controller');
 const todoController = require('./controllers/todo.controller');
 
 let app = express();
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded());
 app.use(bodyParser.text());
 app.use(cors());
 app.listen(3000, () => {
