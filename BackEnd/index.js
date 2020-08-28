@@ -3,6 +3,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const userController = require('./controllers/user.controller');
 const todoController = require('./controllers/todo.controller');
+const passport = require('passport');
+const jwtHelper = require('./jwtHelper');
 
 let app = express();
 app.use(bodyParser.urlencoded({extended: true}));
@@ -14,8 +16,13 @@ app.listen(3000, () => {
 });
 
 require('./db');
+require('./passportConfig');
 
-app.use('/api/user', userController);
+app.use(passport.initialize());
+
+app.post('/authenticate', userController.authenticate);
+
+app.use('/api/user', userController.router);
 
 app.use('/api/todo', todoController);
 

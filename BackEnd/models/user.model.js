@@ -1,7 +1,9 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 var userSchema = new mongoose.Schema({
+    _id: mongoose.Types.ObjectId,
     fullName: {
         type: String,
         required: 'Full name cannot be empty'
@@ -14,7 +16,7 @@ var userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: 'Password cannot be empty',
-        minlength : [8,'Password must be at least 8 characters long']
+        minlength: [8, 'Password must be at least 8 characters long']
     },
     saltSecret: String,
 
@@ -30,6 +32,18 @@ userSchema.path('email').validate((val) => {
     return emailRegex.test(val);
 }, 'Invalid e-mail.');
 
+userSchema.methods.generateJwt = function () {
+    return jwt.sign({
+        _id: this._id
+    }, 'SECRET#444',
+        {
+            expiresIn: '5m'
+        });
+}
+
+userSchema.methods.verifyPassword = async function (password) {
+    return bcrypt.compare(password, this.password);
+}
 
 userSchema.pre('save', function (next) {
     bcrypt.genSalt(10, (err, salt) => {
