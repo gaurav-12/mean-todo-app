@@ -10,7 +10,16 @@ export class TodoService {
   todoList: Array<ToDo> = [];
   readonly todoStatus = { DONE: 'done', PENDING: 'pending', DOING: 'doing' };
 
-  constructor(private httpClient: HttpClient) { }
+  constructor(private httpClient: HttpClient) {
+    const newToDo: ToDo = {
+      title: 'Some Dummy Title',
+      description: 'Some Desctiption',
+      status: this.todoStatus.PENDING,
+      _id: '',
+      createdOn: Date.now()
+    }
+    this.todoList.push(newToDo);
+  }
 
   getToDo(itemIndex?: number) {
     return this.todoList[itemIndex];
@@ -31,7 +40,10 @@ export class TodoService {
   async removeToDo(logout?: Boolean, uid?: String, itemIndex?: number) {
     if (logout) {
       this.todoList = [];
-    } else {
+    } else if (uid == '') {
+      this.todoList.splice(itemIndex, 1);
+    }
+    else {
       const queryParams = new URLSearchParams({
         id: itemIndex == undefined ? '' : this.todoList[itemIndex]._id.toString(),
         index: itemIndex == undefined ? '-1' : itemIndex.toString(),
@@ -63,16 +75,20 @@ export class TodoService {
   }
 
   async addToDo(newToDo: ToDo, uid: String) {
-    const queryParams = new URLSearchParams({
-      uid: uid.toString(),
-      title: newToDo.title.toString(),
-      description: newToDo.description.toString()
-    });
-    await this.httpClient.post(environment.addToDo + queryParams.toString(), {})
-      .toPromise().then((result: ToDo) => {
-        this.todoList.push(result);
-      }).catch(err => {
-        console.log(err);
+    if (uid === null) {
+      this.todoList.push(newToDo);
+    } else {
+      const queryParams = new URLSearchParams({
+        uid: uid.toString(),
+        title: newToDo.title.toString(),
+        description: newToDo.description.toString()
       });
+      await this.httpClient.post(environment.addToDo + queryParams.toString(), {})
+        .toPromise().then((result: ToDo) => {
+          this.todoList.push(result);
+        }).catch(err => {
+          console.log(err);
+        });
+    }
   }
 }

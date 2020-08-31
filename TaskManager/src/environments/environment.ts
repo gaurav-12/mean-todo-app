@@ -6,6 +6,7 @@ export const environment = {
   production: false,
   
   // API URLs
+  baseUrl: 'http://localhost:3000/',
   signup: 'http://localhost:3000/api/user/signup?',
   login: 'http://localhost:3000/api/user/login?',
   getTodo: 'http://localhost:3000/api/todo/get?id=',

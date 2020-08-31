@@ -24,7 +24,8 @@ export class HomeComponent {
     newToDo.title = this.thisTitle;
     newToDo.description = this.thisDescription;
     newToDo.status = this.todoService.todoStatus.PENDING;
-    this.todoService.addToDo(newToDo, this.userService.currentUser._id);
+    this.todoService.addToDo(newToDo, this.userService.isLoggedIn ?
+      this.userService.currentUser._id : null);
 
     this.thisTitle = "";
     this.thisDescription = "";

@@ -17,9 +17,11 @@ export class UserService {
 
   constructor(private todoService: TodoService, private httpClient: HttpClient) {
     this.isLoggedIn = JSON.parse(localStorage.getItem('isLoggedIn'));
-    this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    if (this.isLoggedIn) todoService.getUsersToDos(this.isLoggedIn, this.currentUser._id);
+    if (this.isLoggedIn) {
+      this.currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      todoService.getUsersToDos(this.isLoggedIn, this.currentUser._id);
+    }
   }
 
   async loginUser(email: String, password: String) {

@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { HttpClientModule } from '@angular/common/http'
 
@@ -26,6 +27,7 @@ import { DialogEntryComponent, DialogOverviewDialog } from './dialog/login-signu
   BrowserModule,
     MatDialogModule,
     MatProgressSpinnerModule,
+    MatIconModule,
     FormsModule,
     BrowserAnimationsModule,
     AppRoutingModule,
