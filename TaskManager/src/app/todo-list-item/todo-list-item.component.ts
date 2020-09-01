@@ -19,8 +19,10 @@ export class TodoListItemComponent {
   }
 
   expandToDo() {
-    if (this.expandedIndex == this.todoIndex) this.expandedThis.emit(-1);
-    else this.expandedThis.emit(this.todoIndex);
+    if (this.todoData.description !== "") {
+      if (this.expandedIndex == this.todoIndex) this.expandedThis.emit(-1);
+      else this.expandedThis.emit(this.todoIndex);
+    }
   }
 
   changeStatus(status) {

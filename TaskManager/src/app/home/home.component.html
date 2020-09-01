@@ -19,7 +19,7 @@
   <div id="newTaskFields" [ngClass]="{'newTaskFieldsAbsolute': showMore}">
     <div id="titleBox">
       <input type="text" name="title" [(ngModel)]="thisTitle" required placeholder="Title of new Task..."
-        title="Title of the Task" (focus)="showMore = true" maxlength="25" />
+        title="Title of the Task" (focus)="showMore = true" maxlength="30" />
       <button id="moreButton" *ngIf="showMore" (click)="showMore = false">
         <mat-icon aria-hidden="false" aria-label="Collapse New Task Fields">expand_less</mat-icon>
       </button>

@@ -20,16 +20,18 @@ export class HomeComponent {
   constructor(public todoService: TodoService, public userService: UserService) { }
 
   onSave() {
-    const newToDo = new ToDo();
-    newToDo.title = this.thisTitle;
-    newToDo.description = this.thisDescription;
-    newToDo.status = this.todoService.todoStatus.PENDING;
-    this.todoService.addToDo(newToDo, this.userService.isLoggedIn ?
-      this.userService.currentUser._id : null);
+    if (this.thisTitle !== "") {
+      const newToDo = new ToDo();
+      newToDo.title = this.thisTitle;
+      newToDo.description = this.thisDescription;
+      newToDo.status = this.todoService.todoStatus.PENDING;
+      this.todoService.addToDo([newToDo], this.userService.isLoggedIn ?
+        this.userService.currentUser._id : null);
 
-    this.thisTitle = "";
-    this.thisDescription = "";
-    this.showMore = false;
+      this.thisTitle = "";
+      this.thisDescription = "";
+      this.showMore = false;
+    }
   }
 
   onStatusChange(index, newStatus) {

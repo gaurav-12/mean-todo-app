@@ -23,17 +23,17 @@ router.post('/add', async (req, res) => {
         const user = await UserModel.findById(req.query.uid);
         if (user === null) res.status(400).send('User not found');
         else {
-            const newTodo = new ToDoModel({
-                title: req.query.title,
-                description: req.query.description,
-                uid: req.query.uid
+            req.body.forEach(todo => {
+                todo['uid'] = req.query.uid;
+            });
+            const todos = await ToDoModel.insertMany(req.body);
+            const ids = todos.map(todo => {
+                return todo._id;
             });
 
-            const todo = await newTodo.save();
+            await user.updateOne({ "$push": { "todoList": { "$each": ids } } });
 
-            await user.updateOne({ "$push": { "todoList": todo._id } });
-
-            res.status(201).json(todo.toJSON());
+            res.status(201).json({ 'todos': todos });
         }
     } catch (error) {
         console.error(error);

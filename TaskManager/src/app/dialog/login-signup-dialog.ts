@@ -2,6 +2,13 @@ import { Component, Inject, Injectable } from '@angular/core';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
+import {
+  trigger,
+  style,
+  animate,
+  transition,
+} from '@angular/animations';
+
 import { UserService } from '../services/user.service';
 
 @Component({
@@ -15,7 +22,7 @@ export class DialogEntryComponent {
   }
   openDialog(): void {
     const dialogRef = this.dialog.open(DialogOverviewDialog, {
-      width: '300px', disableClose: true,
+      width: '300px', disableClose: true, panelClass: 'mat-dialog-custom-container', backdropClass: 'mat-dialog-custom-backdrop'
     });
     dialogRef.afterClosed().subscribe(result => {
       this.router.navigate(['../'], { relativeTo: this.route });
@@ -26,7 +33,18 @@ export class DialogEntryComponent {
 @Component({
   selector: 'dialog-overview',
   templateUrl: 'dialog.html',
-  styleUrls: ['dialog.css']
+  styleUrls: ['dialog.css'],
+  animations: [
+    trigger('overlayTrigger', [
+      transition(':enter', [
+        style({ opacity: 0 }),
+        animate('250ms', style({ opacity: 1 })),
+      ]),
+      transition(':leave', [
+        animate('250ms', style({ opacity: 0 }))
+      ])
+    ]),
+  ]
 })
 export class DialogOverviewDialog {
   constructor(public dialogRef: MatDialogRef<DialogOverviewDialog>,
@@ -54,13 +72,37 @@ export class DialogOverviewDialog {
     this.thisRoute = path;
   }
 
-  loginSignup() {
-    if (this.thisRoute === '/login') {
-      this.userService.loginUser(this.email, this.password);
-    } else {
-      this.userService.signupUser(this.name, this.email, this.password);
+  fieldsValid() {
+    this.email = this.email.trim();
+    this.password = this.password.trim();
+    this.confirmPassword = this.confirmPassword.trim();
+    this.name = this.name.trim();
+
+    const passwordMatch = this.password.trim() === this.confirmPassword.trim();
+    const emailPassValid = this.email.trim() !== "" && this.password.trim() !== "";
+
+    if (this.thisRoute === '/login') return emailPassValid;
+    else {
+      return (this.name.trim() !== "") && emailPassValid && passwordMatch;
     }
-    
-    this.closeDialog();
+  }
+
+  async loginSignup() {
+    if (this.fieldsValid()) {
+      this.isLoading = true;
+      try {
+        if (this.thisRoute === '/login') {
+          await this.userService.loginUser(this.email.trim(), this.password.trim());
+        } else {
+          await this.userService.signupUser(this.name.trim(), this.email.trim(), this.password.trim());
+        }
+
+        this.closeDialog();
+      } catch (error) {
+        console.log(error);
+      }
+
+      this.isLoading = false;
+    }
   }
 }

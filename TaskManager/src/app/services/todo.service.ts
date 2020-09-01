@@ -11,14 +11,14 @@ export class TodoService {
   readonly todoStatus = { DONE: 'done', PENDING: 'pending', DOING: 'doing' };
 
   constructor(private httpClient: HttpClient) {
-    const newToDo: ToDo = {
-      title: 'Some Dummy Title',
-      description: 'Some Desctiption',
-      status: this.todoStatus.PENDING,
-      _id: '',
-      createdOn: Date.now()
-    }
-    this.todoList.push(newToDo);
+    // Uncomment below lines for testing.
+    // const newToDo: ToDo = {
+    //   title: 'Some Dummy Title',
+    //   description: 'Some Description',
+    //   status: this.todoStatus.PENDING,
+    //   createdOn: Date.now()
+    // }
+    // this.todoList.push(newToDo);
   }
 
   getToDo(itemIndex?: number) {
@@ -74,18 +74,17 @@ export class TodoService {
       });
   }
 
-  async addToDo(newToDo: ToDo, uid: String) {
+  async addToDo(newToDos: ToDo[], uid: String, signup?: boolean) {
     if (uid === null) {
-      this.todoList.push(newToDo);
+      this.todoList = this.todoList.concat(newToDos);
     } else {
       const queryParams = new URLSearchParams({
         uid: uid.toString(),
-        title: newToDo.title.toString(),
-        description: newToDo.description.toString()
       });
-      await this.httpClient.post(environment.addToDo + queryParams.toString(), {})
-        .toPromise().then((result: ToDo) => {
-          this.todoList.push(result);
+      await this.httpClient.post(environment.addToDo + queryParams.toString(), newToDos)
+        .toPromise().then((result) => {
+          signup ? this.todoList = result['todos'] :
+            this.todoList = this.todoList.concat(result['todos']);
         }).catch(err => {
           console.log(err);
         });

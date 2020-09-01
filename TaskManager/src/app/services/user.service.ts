@@ -3,6 +3,7 @@ import { User } from './../models/user.model';
 import { TodoService } from './todo.service';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
+import { async } from '@angular/core/testing';
 
 @Injectable({
   providedIn: 'root'
@@ -29,7 +30,7 @@ export class UserService {
       email: email.toString(),
       password: password.toString()
     });
-    await this.httpClient.get(environment.login + queryParams.toString(), {})
+    return this.httpClient.get(environment.login + queryParams.toString(), {})
       .toPromise().then((result: User) => {
         this.currentUser = {
           _id: result._id,
@@ -42,9 +43,7 @@ export class UserService {
         localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
 
         this.todoService.getUsersToDos(this.isLoggedIn, this.currentUser._id);
-      }).catch(err => {
-        console.log(err);
-      });
+      })
   }
 
   async signupUser(name: String, email: String, password: String) {
@@ -53,20 +52,20 @@ export class UserService {
       email: email.toString(),
       password: password.toString()
     });
-    await this.httpClient.post(environment.signup + queryParams.toString(), {})
-      .toPromise().then((result: User) => {
+    return this.httpClient.post(environment.signup + queryParams.toString(), {})
+      .toPromise().then(async (result: User) => {
         this.currentUser = {
           _id: result._id,
           fullName: name
         }
 
+        await this.todoService.addToDo(this.todoService.todoList, result._id, true);
+
         this.isLoggedIn = true;
 
         localStorage.setItem('isLoggedIn', 'true');
         localStorage.setItem('currentUser', JSON.stringify(this.currentUser));
-      }).catch(err => {
-        console.log(err);
-      });
+      })
   }
 
   logoutUser() {

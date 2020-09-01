@@ -24,7 +24,7 @@ import { DialogEntryComponent, DialogOverviewDialog } from './dialog/login-signu
     HomeComponent,
   ],
   imports: [
-  BrowserModule,
+    BrowserModule,
     MatDialogModule,
     MatProgressSpinnerModule,
     MatIconModule,
