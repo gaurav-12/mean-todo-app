@@ -14,3 +14,12 @@ After successful setup of the projects, follow these steps
 * Start Express Server, in `Backend` directory, `npm start`.
 * Run Angular project, in `TaskManager` directory, `ng serve`.
 * Now the project should be up and running 👍🏻.
+
+# 📸 Working Screenshots
+![Initial Page](https://i.imgur.com/fCvNetD.jpg)
+![Add new Task](https://i.imgur.com/tu67PrJ.jpg)
+![Task marked 'Done'](https://i.imgur.com/SCJ3Tfj.jpg)
+
+![Signup](https://i.imgur.com/s34xcaR.jpg)
+![Login](https://i.imgur.com/rPermRo.jpg)
+![Home Page](https://i.imgur.com/X7ys72J.jpg)
