@@ -4,10 +4,10 @@ const ToDoModel = require('../models/todo.model');
 
 router.get('/get', async (req, res) => {
     try {
-        const user = await UserModel.findById(req.query.id);
+        const user = await UserModel.findById(req._id);
         if (user === null) res.status(400).send('User not found');
         else {
-            const todos = await ToDoModel.find({ uid: req.query.id });
+            const todos = await ToDoModel.find({ uid: req._id });
             res.status(201).send(todos);
         }
     } catch (error) {
@@ -20,11 +20,11 @@ router.get('/get', async (req, res) => {
 
 router.post('/add', async (req, res) => {
     try {
-        const user = await UserModel.findById(req.query.uid);
+        const user = await UserModel.findById(req._id);
         if (user === null) res.status(400).send('User not found');
         else {
             req.body.forEach(todo => {
-                todo['uid'] = req.query.uid;
+                todo['uid'] = req._id;
             });
             const todos = await ToDoModel.insertMany(req.body);
             const ids = todos.map(todo => {
@@ -46,12 +46,12 @@ router.post('/add', async (req, res) => {
 router.put('/update', async (req, res) => { // Expects whole todo including: title, description and status
     // Here query.id is the _id of ToDo Document and not the user id(uid)
     try {
-        const todo = await ToDoModel.findById(req.query.id);
+        const todo = await ToDoModel.findById(req.body.id);
         if (todo === null) res.status(400).send('ToDo not found');
         else {
-            todo.title = req.query.title;
-            todo.description = req.query.description;
-            todo.status = req.query.status;
+            todo.title = req.body.title;
+            todo.description = req.body.description;
+            todo.status = req.body.status;
 
             await todo.save();
             res.status(200).json({ success: true, message: 'ToDo updated' });
@@ -64,22 +64,23 @@ router.put('/update', async (req, res) => { // Expects whole todo including: tit
     }
 });
 
-router.delete('/remove', async (req, res) => { // Expects the index of todo to be deleted, _id of ToDo, and user's if (as 'uid' in ToDo)
+router.delete('/remove', async (req, res) => { // Expects the index of todo to be deleted, _id of ToDo, and user's id (as 'uid' in ToDo)
     try {
-        const user = await UserModel.findById(req.query.uid);
+        const user = await UserModel.findById(req._id);
+        console.log(req.params);
         if (user === null) res.status(400).send('User not found');
         else {
-            if (req.query.index === '-1') await user.update({ "$pull": { "todoList": { "uid": user._id } } });
+            if (req.params.index === '-1') await user.update({ "$pull": { "todoList": { "uid": user._id } } });
             else {
-                const todo = user.todoList[req.query.index]
+                const todo = user.todoList[req.params.index]
                 await user.updateOne({ "$pull": { "todoList": { "$in": [todo] } } });
             }
         }
 
-        if (req.query.index === '-1') { // Delete all with matching 'uid'
-            await ToDoModel.remove({ uid: req.query.uid });
+        if (req.params.index === '-1') { // Delete all with matching 'uid'
+            await ToDoModel.remove({ uid: req._id });
         } else {
-            const todo = await ToDoModel.findById(req.query.id);
+            const todo = await ToDoModel.findById(req.params.id);
             if (todo === null) res.status(400).send('ToDo not found');
             else await todo.deleteOne();
         }

@@ -4,14 +4,14 @@
   <span>TaskManager</span>
 
   <div>
-    <button routerLink="login" *ngIf="!userService.isLoggedIn">Log in</button>
-    <button routerLink="signup" *ngIf="!userService.isLoggedIn">Sign up</button>
-    <button *ngIf="userService.isLoggedIn" (click)="userService.logoutUser()">Logout</button>
+    <button routerLink="login" *ngIf="!userService.isLoggedIn()">Log in</button>
+    <button routerLink="signup" *ngIf="!userService.isLoggedIn()">Sign up</button>
+    <button *ngIf="userService.isLoggedIn()" (click)="userService.logoutUser()">Logout</button>
   </div>
 </div>
 
 <div id="container">
-  <h1>{{userService.isLoggedIn? 'Hello ' + userService.currentUser.fullName + '!' : 'Hello there!'}}</h1>
+  <h1>{{userService.isLoggedIn()? 'Hello ' + userService.currentUser.fullName + '!' : 'Hello there!'}}</h1>
   <p> Add new Tasks and mark them as Done, Pending or Ongoing </p>
 
   <div id="overlay" *ngIf="showMore"></div>

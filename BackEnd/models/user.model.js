@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+const jsonwebtoken = require('jsonwebtoken');
+const config = require('../config.json');
+const { v4 } = require('uuid');
 
 var userSchema = new mongoose.Schema({
     fullName: {
@@ -32,12 +34,16 @@ userSchema.path('email').validate((val) => {
 }, 'Invalid e-mail.');
 
 userSchema.methods.generateJwt = function () {
-    return jwt.sign({
+    const jwt = jsonwebtoken.sign({
         _id: this._id
-    }, 'SECRET#444',
+    }, config.jwt.secret,
         {
-            expiresIn: '5m'
+            expiresIn: config.jwt.expiry
         });
+
+    const refreshToken = v4();
+
+    return ({ jwt: jwt, refreshToken: refreshToken });
 }
 
 userSchema.methods.verifyPassword = async function (password) {

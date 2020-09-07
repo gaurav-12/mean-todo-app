@@ -10,6 +10,7 @@ import {
 } from '@angular/animations';
 
 import { UserService } from '../services/user.service';
+import { User } from '../models/user.model';
 
 @Component({
   template: '',
@@ -91,10 +92,16 @@ export class DialogOverviewDialog {
     if (this.fieldsValid()) {
       this.isLoading = true;
       try {
+        const user: User = {
+          fullName: this.name.trim(),
+          email: this.email.trim(),
+          password: this.password.trim()
+        }
+
         if (this.thisRoute === '/login') {
-          await this.userService.loginUser(this.email.trim(), this.password.trim());
+          await this.userService.loginUser(user);
         } else {
-          await this.userService.signupUser(this.name.trim(), this.email.trim(), this.password.trim());
+          await this.userService.signupUser(user);
         }
 
         this.closeDialog();

@@ -4,15 +4,15 @@
 
 export const environment = {
   production: false,
-  
+
   // API URLs
-  baseUrl: 'http://localhost:3000/',
-  signup: 'http://localhost:3000/api/user/signup?',
-  login: 'http://localhost:3000/api/user/login?',
-  getTodo: 'http://localhost:3000/api/todo/get?id=',
-  removeToDO: 'http://localhost:3000/api/todo/remove?',
-  addToDo: 'http://localhost:3000/api/todo/add?',
-  updateToDo: 'http://localhost:3000/api/todo/update?'
+  baseUrl: 'http://localhost:3000/api/',
+  signup: 'http://localhost:3000/api/user/signup',
+  login: 'http://localhost:3000/api/user/login',
+  getTodo: 'http://localhost:3000/api/todo/get',
+  removeToDO: 'http://localhost:3000/api/todo/remove',
+  addToDo: 'http://localhost:3000/api/todo/add',
+  updateToDo: 'http://localhost:3000/api/todo/update'
 };
 
 /*

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ToDo } from './../models/todo.model';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 
 @Injectable({
@@ -25,9 +25,9 @@ export class TodoService {
     return this.todoList[itemIndex];
   }
 
-  getUsersToDos(isLoggedIn: Boolean, uid: String) {
+  getUsersToDos(isLoggedIn: Boolean) {
     if (isLoggedIn) {
-      this.httpClient.get(environment.getTodo + uid, {})
+      this.httpClient.get(environment.getTodo)
         .toPromise().then((todos: ToDo[]) => {
           this.todoList = todos;
         })
@@ -37,19 +37,18 @@ export class TodoService {
     }
   }
 
-  async removeToDo(logout?: Boolean, uid?: String, itemIndex?: number) {
+  async removeToDo(logout?: Boolean, isLoggedIn?: boolean, itemIndex?: number) {
     if (logout) {
       this.todoList = [];
-    } else if (uid == '') {
+    } else if (!isLoggedIn) {
       this.todoList.splice(itemIndex, 1);
     }
     else {
-      const queryParams = new URLSearchParams({
+      const body = {
         id: itemIndex == undefined ? '' : this.todoList[itemIndex]._id.toString(),
-        index: itemIndex == undefined ? '-1' : itemIndex.toString(),
-        uid: itemIndex == undefined ? '' : uid.toString(),
-      });
-      await this.httpClient.delete(environment.removeToDO + queryParams.toString(), {})
+        index: itemIndex == undefined ? '-1' : itemIndex.toString()
+      };
+      await this.httpClient.delete(environment.removeToDO, { params: body })
         .toPromise().then((result) => {
           if (itemIndex == undefined) this.todoList = [];
           else this.todoList.splice(itemIndex, 1);
@@ -60,13 +59,13 @@ export class TodoService {
   }
 
   async updateToDo(itemIndex: number, updatedToDo: ToDo) {
-    const queryParams = new URLSearchParams({
+    const body = {
       id: itemIndex == undefined ? '' : this.todoList[itemIndex]._id.toString(),
       title: updatedToDo.title.toString(),
       description: updatedToDo.description.toString(),
       status: updatedToDo.status.toString()
-    });
-    await this.httpClient.put(environment.updateToDo + queryParams.toString(), {})
+    };
+    await this.httpClient.put(environment.updateToDo, body)
       .toPromise().then(result => {
         this.todoList[itemIndex] = updatedToDo;
       }).catch(err => {
@@ -74,20 +73,18 @@ export class TodoService {
       });
   }
 
-  async addToDo(newToDos: ToDo[], uid: String, signup?: boolean) {
-    if (uid === null) {
+  async addToDo(newToDos: ToDo[], token: String, signup?: boolean) {
+    if (token === null) {
       this.todoList = this.todoList.concat(newToDos);
     } else {
-      const queryParams = new URLSearchParams({
-        uid: uid.toString(),
-      });
-      await this.httpClient.post(environment.addToDo + queryParams.toString(), newToDos)
-        .toPromise().then((result) => {
-          signup ? this.todoList = result['todos'] :
-            this.todoList = this.todoList.concat(result['todos']);
-        }).catch(err => {
-          console.log(err);
-        });
+      if (newToDos.length !== 0)
+        await this.httpClient.post(environment.addToDo, newToDos)
+          .toPromise().then((result) => {
+            signup ? this.todoList = result['todos'] :
+              this.todoList = this.todoList.concat(result['todos']);
+          }).catch(err => {
+            console.log(err);
+          });
     }
   }
 }

@@ -20,7 +20,6 @@ passport.use(
                         else
                             return done(null, false, { message: 'Wrong password.' });
                     }
-
                 });
         })
 );
